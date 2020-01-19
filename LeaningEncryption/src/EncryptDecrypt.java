@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,50 +16,46 @@ public class EncryptDecrypt {
 		this.localKey = localKey; // Brings in 256 random characters
 		keyNumber = makeKeyNumber(localKey); 
 		exportEncryption("test","test.txt");
+		
 		try {
 			importEncryption("test.txt");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println();
 		}
 	    
 	}
 	
 
-//	private void importEncryption(String fileName) throws IOException {
-//		BufferedReader br = new BufferedReader(new FileReader(fileName));
-//		StringBuilder sb = new StringBuilder();
-//		byte[] test;
-//		while(br.readLine() != null) {
-//			sb.append(br.readLine());
-//			test.
-//		}
-//		
-//		br.close();
-//		String encryptedText = sb.toString();
-//		System.out.println(encryptedText);
-//		byte[] msg = encryptedText.getBytes();
-//		//String msg = decryptString(encryptedText);
-//		
-//		for(int i = 0 ; i<msg.length; i++ ) {
-//		System.out.print(msg[i] + " ");
-//		
-//		}
-//	}
+	private void importEncryption(String fileName) throws IOException {
+		File file = new File(fileName);
+		byte[] bytes = null;
+		try {
+			FileInputStream input = new FileInputStream(file);
+			 bytes = input.readAllBytes();
+			input.close();
+		}catch (IOException e) {
+			System.out.println("Could not load file");
+			
+		}
+	
+		String msg = new String(decryptString(bytes));
+		System.out.println(msg);
+	}
 	
 	private void exportEncryption(String str, String fileName) {
 		byte[]  EncryptedStr = encryptString(str);
-		try {
-			PrintWriter out = new PrintWriter(fileName);
-			for(int i = 0; i< EncryptedStr.length;i++) {
-			out.println(EncryptedStr[i]);
-			}
-			out.close();
-			System.out.println("Encryption Saved to: " + fileName);
-		} catch (FileNotFoundException e) {
-			System.out.println("Could not export");
+		File file = new File(fileName);
+	   try {
+			FileOutputStream  output = new FileOutputStream(file); 
+			
+			output.write(EncryptedStr);
+			output.flush();
+			output.close();
+			System.out.println("File written to: " + fileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Could not Write file");
 		}
-		
 		
 	}
 
@@ -74,8 +73,8 @@ public class EncryptDecrypt {
 		
 	}
 	
-	private byte[] decryptString(String encryptedText) {
-		byte[] msgBytes = encryptedText.getBytes();
+	private String decryptString(byte[] byteArr) {
+		byte[] msgBytes = byteArr;
 		
 	
 		for(int i = 0; i < msgBytes.length; i++) {
@@ -83,7 +82,8 @@ public class EncryptDecrypt {
 			msgBytes[i] = (byte) (msgBytes[i] -  keyNumber);
 			
 		}
-		return msgBytes;
+		String decr = msgBytes.toString();
+		return decr;
 
 	}
 	
