@@ -13,15 +13,15 @@ public class Main {
 		Crypto = new keyHandler();
 		checkKey();
 		cryptoHandler = new EncryptDecrypt(localKey);
-       
-	
+    cryptoHandler.EncryptFile("test.txt", "This is how to test encryption. If local key is deleted, you wont be able to decrypt this file.");
+	cryptoHandler.DecryptFile("test.txt");
 }
 	public static void printKey() {
 		System.out.println("Your local key is:");
 		for (int i = 0; i<localKey.length; i++) {
 			System.out.print(localKey[i]);
 		}
-		
+		System.out.println("");
 		
 	}
 	public static void checkKey() {
