@@ -100,11 +100,12 @@ public class EncryptDecrypt {
 
 	
 	private long makeKeyNumber(char[] key) {
-	int keyNum = 0;
+	long keyNum = 0;
 		for(int i = 0; i<key.length; i++) {   //Builds String from character array
 			int ascii = (int) key[i];
 			keyNum += ascii;
 		}
+		keyNum = (long) Math.pow(keyNum, 16);
 		return keyNum; //returns long
 	}
 
